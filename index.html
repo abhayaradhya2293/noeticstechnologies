@@ -30,6 +30,9 @@
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--cream);font-family:'Inter',system-ui,sans-serif;font-weight:400;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  /* site-wide neural field sits behind all content */
+  #brain{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+  section,footer,.marquee{position:relative;z-index:1}
   ::selection{background:rgba(233,169,60,0.25);color:var(--white)}
   a{color:inherit;text-decoration:none}
   .wrap{max-width:var(--max);margin:0 auto;padding:0 36px}
@@ -81,7 +84,7 @@
   /* ---------- GENERIC SECTION ---------- */
   section{position:relative}
   .pad{padding:120px 0}
-  .soft{background:var(--bg-soft)}
+  .soft{background:rgba(255,255,255,0.014)}
 
   /* ---------- PROBLEM (centered editorial) ---------- */
   .problem{text-align:center;padding:130px 0}
@@ -185,7 +188,7 @@
 
   /* ---------- IMPACT (climax) ---------- */
   .impact{text-align:center;padding:140px 0;background:
-     radial-gradient(60% 80% at 50% 0%,rgba(233,169,60,0.10),transparent 60%),var(--bg-soft);
+     radial-gradient(60% 80% at 50% 0%,rgba(233,169,60,0.10),transparent 60%),rgba(255,255,255,0.014);
      border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
   .impact .label{margin-bottom:30px;display:inline-block}
   .bigclock{display:flex;align-items:center;justify-content:center;gap:clamp(20px,5vw,64px);flex-wrap:wrap}
@@ -235,6 +238,19 @@
   form button:hover{transform:translateY(-2px);box-shadow:0 14px 38px -14px rgba(233,169,60,0.7)}
   .form-note{font-size:12px;color:var(--muted-2);text-align:center}
   @media(max-width:600px){.frow{grid-template-columns:1fr}}
+  /* custom dropdown */
+  .cselect{position:relative}
+  .cselect-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:9px;padding:13px 15px;color:var(--cream);font-family:'Inter',sans-serif;font-size:14.5px;cursor:pointer;text-align:left;transition:border-color .2s,background .2s}
+  .cselect-btn:hover{border-color:var(--line-gold)}
+  .cselect.open .cselect-btn{border-color:var(--line-gold);background:rgba(233,169,60,0.05)}
+  .cselect-caret{width:16px;height:16px;stroke:var(--muted);fill:none;stroke-width:1.9;flex-shrink:0;transition:transform .25s,stroke .2s}
+  .cselect.open .cselect-caret{transform:rotate(180deg);stroke:var(--gold)}
+  .cselect-list{position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:20;list-style:none;margin:0;padding:6px;background:#0e0e14;border:1px solid var(--line-gold);border-radius:11px;box-shadow:0 24px 54px -22px rgba(0,0,0,0.85);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .2s,transform .2s,visibility .2s}
+  .cselect.open .cselect-list{opacity:1;visibility:visible;transform:none}
+  .cselect-list li{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-radius:7px;font-size:14.5px;color:#cfcfd4;cursor:pointer;transition:background .15s,color .15s}
+  .cselect-list li:hover{background:rgba(233,169,60,0.1);color:var(--white)}
+  .cselect-list li.sel{color:var(--gold)}
+  .cselect-list li.sel::after{content:"\2713";color:var(--gold);font-size:12px}
 
   /* ---------- FOOTER ---------- */
   footer{padding:46px 0;border-top:1px solid var(--line)}
@@ -251,6 +267,7 @@
 </style>
 </head>
 <body>
+<canvas id="brain" aria-hidden="true"></canvas>
 
 <header class="nav" id="nav">
   <div class="nav-inner">
@@ -560,8 +577,20 @@
       </div>
       <div class="frow">
         <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required placeholder="you@company.com" /></div>
-        <div class="field"><label for="role">I'm reaching out as</label>
-          <select id="role" name="role"><option>A potential customer</option><option>An investor</option><option>A partner</option><option>Other</option></select>
+        <div class="field"><label id="roleLabel">I'm reaching out as</label>
+          <div class="cselect" id="roleSelect">
+            <button type="button" class="cselect-btn" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="roleLabel">
+              <span class="cselect-val">A potential customer</span>
+              <svg class="cselect-caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </button>
+            <ul class="cselect-list" role="listbox">
+              <li role="option" class="sel" data-value="A potential customer">A potential customer</li>
+              <li role="option" data-value="An investor">An investor</li>
+              <li role="option" data-value="A partner">A partner</li>
+              <li role="option" data-value="Other">Other</li>
+            </ul>
+            <input type="hidden" name="role" value="A potential customer" />
+          </div>
         </div>
       </div>
       <div class="field"><label for="msg">Message</label><textarea id="msg" name="msg" placeholder="Which systems do you run, and what question takes you a week to answer?"></textarea></div>
@@ -593,6 +622,20 @@
     window.location.href='mailto:abhay@noeticstechnologies.com?subject='+subject+'&body='+body;
   });
 
+  // custom dropdown
+  (function(){
+    const cs=document.getElementById('roleSelect');if(!cs)return;
+    const btn=cs.querySelector('.cselect-btn'),val=cs.querySelector('.cselect-val'),list=cs.querySelector('.cselect-list'),hidden=cs.querySelector('input[type=hidden]');
+    function close(){cs.classList.remove('open');btn.setAttribute('aria-expanded','false')}
+    btn.addEventListener('click',e=>{e.stopPropagation();const open=cs.classList.toggle('open');btn.setAttribute('aria-expanded',open?'true':'false')});
+    list.querySelectorAll('li').forEach(li=>li.addEventListener('click',()=>{
+      list.querySelectorAll('li').forEach(o=>o.classList.remove('sel'));li.classList.add('sel');
+      val.textContent=li.dataset.value;hidden.value=li.dataset.value;close();
+    }));
+    document.addEventListener('click',e=>{if(!cs.contains(e.target))close()});
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
+  })();
+
   (function(){
     const c=document.getElementById('net');if(!c)return;const x=c.getContext('2d');
     let w,h,nodes,raf;const N=window.innerWidth<700?22:42;
@@ -606,6 +649,37 @@
       for(const n of nodes){x.beginPath();x.arc(n.x,n.y,n.r,0,7);x.fillStyle='rgba(233,169,60,0.55)';x.fill()}
       raf=requestAnimationFrame(draw)}
     size();draw();addEventListener('resize',()=>{cancelAnimationFrame(raf);size();draw()})
+  })();
+
+  // site-wide neural field (~5%) with occasional firing signals
+  (function(){
+    const c=document.getElementById('brain');if(!c)return;const x=c.getContext('2d');
+    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let w,h,nodes,pulses,raf,nextFire=0,EDGE=0.22,NODE=0.40;const D=250,heroEl=document.getElementById('top');
+    const N=()=>innerWidth<700?26:54;
+    function size(){c.width=innerWidth*devicePixelRatio;c.height=innerHeight*devicePixelRatio;
+      x.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);w=innerWidth;h=innerHeight;
+      nodes=[];const n=N();for(let i=0;i<n;i++){nodes.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*0.1,vy:(Math.random()-.5)*0.1,glow:0})}pulses=[]}
+    function edges(){for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){const a=nodes[i],b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.hypot(dx,dy);
+      if(d<D){x.strokeStyle='rgba(233,169,60,'+(EDGE*(1-d/D))+')';x.lineWidth=1;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}}
+    function dots(){for(const nd of nodes){const g=Math.max(0,nd.glow);x.beginPath();x.arc(nd.x,nd.y,1.6+g*1.8,0,7);x.fillStyle='rgba(233,169,60,'+(NODE+g*0.5)+')';x.fill()}}
+    function spawn(){const a=Math.floor(Math.random()*nodes.length);let best=-1,bd=D;
+      for(let j=0;j<nodes.length;j++){if(j===a)continue;const dx=nodes[a].x-nodes[j].x,dy=nodes[a].y-nodes[j].y,d=Math.hypot(dx,dy);if(d<bd){bd=d;best=j}}
+      if(best>=0)pulses.push({a,b:best,t:0,sp:0.012+Math.random()*0.01})}
+    function frame(ts){raf=requestAnimationFrame(frame);if(document.hidden)return;
+      const hb=heroEl?heroEl.offsetHeight:600,inHero=scrollY<hb-100;EDGE=inHero?0.20:0.10;NODE=inHero?0.36:0.25;
+      x.clearRect(0,0,w,h);
+      for(const nd of nodes){nd.x+=nd.vx;nd.y+=nd.vy;if(nd.x<0||nd.x>w)nd.vx*=-1;if(nd.y<0||nd.y>h)nd.vy*=-1;if(nd.glow>0)nd.glow-=0.018}
+      edges();dots();
+      if(ts>nextFire){spawn();nextFire=ts+1700+Math.random()*2300}
+      for(let i=pulses.length-1;i>=0;i--){const p=pulses[i];p.t+=p.sp;const a=nodes[p.a],b=nodes[p.b];const px=a.x+(b.x-a.x)*p.t,py=a.y+(b.y-a.y)*p.t;
+        x.beginPath();x.arc(px,py,4.5,0,7);x.fillStyle='rgba(233,169,60,0.10)';x.fill();
+        x.beginPath();x.arc(px,py,2,0,7);x.fillStyle='rgba(242,199,129,0.7)';x.fill();
+        if(p.t>=1){nodes[p.b].glow=1;pulses.splice(i,1)}}}
+    size();
+    if(reduce){x.clearRect(0,0,w,h);edges();dots()}
+    else{raf=requestAnimationFrame(frame)}
+    addEventListener('resize',()=>{cancelAnimationFrame(raf);size();if(reduce){x.clearRect(0,0,w,h);edges();dots()}else{raf=requestAnimationFrame(frame)}})
   })();
 </script>
 </body>
