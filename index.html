@@ -275,25 +275,21 @@
   .team-block+.team-block{margin-top:48px}
   .team-sub{display:flex;align-items:center;gap:16px;margin-bottom:18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-deep)}
   .team-sub::after{content:"";flex:1;height:1px;background:var(--line-soft)}
-  .team-two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
   .team-three{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
   .person{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:30px;transition:border-color .25s,background .25s,transform .25s}
   .person:hover{border-color:var(--line-gold);background:var(--card-hover);transform:translateY(-3px)}
-  .person.wide{display:flex;gap:28px;align-items:flex-start}
   .ph{position:relative;width:104px;height:104px;border-radius:50%;flex-shrink:0;overflow:hidden;border:1px solid var(--line-gold);background:radial-gradient(circle at 50% 30%,rgba(233,169,60,0.18),rgba(233,169,60,0.03));display:flex;align-items:center;justify-content:center}
   .ph::before{content:attr(data-i);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:32px;color:var(--gold);letter-spacing:0.02em}
   .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .person.wide .ph{width:128px;height:128px}
-  .person.wide .ph::before{font-size:40px}
   .team-three .ph{margin-bottom:22px}
+  .team-three.lead .ph{width:124px;height:124px}
+  .team-three.lead .ph::before{font-size:38px}
   .person h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;color:var(--white);letter-spacing:-0.01em;line-height:1.25}
   .person .role{margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold)}
   .person .cred{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.5}
   .person p{margin-top:14px;font-size:14.5px;color:#aeaeb5;line-height:1.6}
-  .person.mentor{border-color:var(--line-gold);background:linear-gradient(180deg,rgba(233,169,60,0.08),rgba(233,169,60,0.015))}
-  .person.mentor p{font-family:'Space Grotesk',sans-serif;font-size:clamp(18px,2vw,22px);color:var(--cream);line-height:1.4;letter-spacing:-0.01em;max-width:34ch}
-  @media(max-width:960px){.team-two{grid-template-columns:1fr}.team-three{grid-template-columns:1fr 1fr}}
-  @media(max-width:620px){.team-three{grid-template-columns:1fr}.person.wide{flex-direction:column;gap:22px}.person{padding:26px}}
+  @media(max-width:960px){.team-three{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){.team-three{grid-template-columns:1fr}.person{padding:26px}}
 
   /* ---------- FOOTER ---------- */
   footer{padding:46px 0;border-top:1px solid var(--line)}
@@ -628,24 +624,27 @@
 
     <div class="team-block">
       <div class="team-sub reveal">Leadership</div>
-      <div class="team-two">
-        <article class="person wide reveal">
+      <div class="team-three lead">
+        <article class="person reveal">
           <div class="ph" data-i="AA"><img src="assets/team/abhay-aradhya.jpg" alt="Dr. Abhay Aradhya" loading="lazy" onerror="this.remove()" /></div>
-          <div>
-            <h3>Dr. Abhay Aradhya</h3>
-            <div class="role">Founder &amp; CEO</div>
-            <div class="cred">PhD in deep learning, NTU Singapore · Second-time founder</div>
-            <p>Leads the company and its technology. Has architected enterprise AI for 22+ companies, with 9 papers at AAAI, IEEE, ICDM and IJCAI.</p>
-          </div>
+          <h3>Dr. Abhay Aradhya</h3>
+          <div class="role">Founder &amp; CEO</div>
+          <div class="cred">PhD in deep learning, NTU Singapore · Second-time founder</div>
+          <p>Leads the company and its technology. Has architected enterprise AI for 22+ companies, with 9 papers at AAAI, IEEE, ICDM and IJCAI.</p>
         </article>
-        <article class="person wide reveal" style="transition-delay:.08s">
+        <article class="person reveal" style="transition-delay:.08s">
+          <div class="ph" data-i="BA"><img src="assets/team/bharadwaj-amrutur.jpg" alt="Prof. Bharadwaj Amrutur" loading="lazy" onerror="this.remove()" /></div>
+          <h3>Prof. Bharadwaj Amrutur</h3>
+          <div class="role">Advisor</div>
+          <div class="cred">Professor, IISc · Executive Director, ARTPARK</div>
+          <p>Guides technology development and mentors venture building. He advises on how the Noetics model is built and tested, drawing on two decades of research at IISc.</p>
+        </article>
+        <article class="person reveal" style="transition-delay:.16s">
           <div class="ph" data-i="SB"><img src="assets/team/soumyadeep-bhadra.jpg" alt="Soumyadeep Bhadra" loading="lazy" onerror="this.remove()" /></div>
-          <div>
-            <h3>Soumyadeep Bhadra</h3>
-            <div class="role">CBO</div>
-            <div class="cred">MBA, IIM Ranchi · Management consulting</div>
-            <p>Leads business, partnerships and go-to-market. Seven years leading business development and large-scale transformations for Fortune organizations.</p>
-          </div>
+          <h3>Soumyadeep Bhadra</h3>
+          <div class="role">CBO</div>
+          <div class="cred">MBA, IIM Ranchi · Management consulting</div>
+          <p>Leads business, partnerships and go-to-market. Seven years leading business development and large-scale transformations for Fortune organizations.</p>
         </article>
       </div>
     </div>
@@ -675,19 +674,6 @@
           <p>Builds the AI core: orchestration, retrieval and evaluation, including LLM harnesses and agent workflows.</p>
         </article>
       </div>
-    </div>
-
-    <div class="team-block">
-      <div class="team-sub reveal">Mentor</div>
-      <article class="person wide mentor reveal">
-        <div class="ph" data-i="BA"><img src="assets/team/bharadwaj-amrutur.jpg" alt="Prof. Bharadwaj Amrutur" loading="lazy" onerror="this.remove()" /></div>
-        <div>
-          <h3>Prof. Bharadwaj Amrutur</h3>
-          <div class="role">Mentor</div>
-          <div class="cred">Professor, IISc · Executive Director, ARTPARK</div>
-          <p>Guides technology development and mentors venture building.</p>
-        </div>
-      </article>
     </div>
   </div>
 </section>
