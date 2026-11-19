@@ -54,6 +54,19 @@
   .nav-cta{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.05em;color:var(--bg)!important;background:var(--gold);padding:9px 18px;border-radius:8px;font-weight:500;transition:transform .2s,box-shadow .2s}
   .nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 24px -8px rgba(233,169,60,0.6)}
   @media(max-width:860px){.nav-links a:not(.nav-cta){display:none}}
+  /* mobile menu */
+  .nav-toggle{display:none;width:40px;height:38px;border:1px solid var(--line);border-radius:9px;background:transparent;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:0}
+  .nav-toggle span{display:block;width:16px;height:1.5px;background:var(--cream);transition:transform .25s}
+  .nav.open .nav-toggle span:first-child{transform:translateY(3.25px) rotate(45deg)}
+  .nav.open .nav-toggle span:last-child{transform:translateY(-3.25px) rotate(-45deg)}
+  .mnav{display:none}
+  @media(max-width:860px){
+    .nav-links{gap:12px}
+    .nav-toggle{display:flex}
+    .nav.open{background:rgba(8,8,10,0.96);border-bottom:1px solid var(--line)}
+    .nav.open .mnav{display:flex;flex-direction:column;max-width:var(--max);margin:0 auto;padding:4px 36px 18px}
+    .mnav a{padding:14px 2px;font-size:15px;color:var(--cream);border-top:1px solid var(--line-soft)}
+  }
 
   /* ---------- HERO ---------- */
   .hero{position:relative;padding:184px 0 120px;overflow:hidden}
@@ -253,6 +266,35 @@
   .cselect-list li.sel{color:var(--gold)}
   .cselect-list li.sel::after{content:"\2713";color:var(--gold);font-size:12px}
 
+  /* ---------- TEAM ---------- */
+  .team{border-top:1px solid var(--line-soft)}
+  .team-head{text-align:center;margin-bottom:60px}
+  .team-head .label{display:inline-block;margin-bottom:14px}
+  .team-head h2{font-size:clamp(28px,3.8vw,46px);color:var(--white);letter-spacing:-0.025em}
+  .team-head p{max-width:56ch;margin:18px auto 0;color:#a4a4ab;font-size:16.5px;line-height:1.6}
+  .team-block+.team-block{margin-top:48px}
+  .team-sub{display:flex;align-items:center;gap:16px;margin-bottom:18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold-deep)}
+  .team-sub::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+  .team-two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .team-three{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .person{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);padding:30px;transition:border-color .25s,background .25s,transform .25s}
+  .person:hover{border-color:var(--line-gold);background:var(--card-hover);transform:translateY(-3px)}
+  .person.wide{display:flex;gap:28px;align-items:flex-start}
+  .ph{position:relative;width:104px;height:104px;border-radius:50%;flex-shrink:0;overflow:hidden;border:1px solid var(--line-gold);background:radial-gradient(circle at 50% 30%,rgba(233,169,60,0.18),rgba(233,169,60,0.03));display:flex;align-items:center;justify-content:center}
+  .ph::before{content:attr(data-i);font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:32px;color:var(--gold);letter-spacing:0.02em}
+  .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .person.wide .ph{width:128px;height:128px}
+  .person.wide .ph::before{font-size:40px}
+  .team-three .ph{margin-bottom:22px}
+  .person h3{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;color:var(--white);letter-spacing:-0.01em;line-height:1.25}
+  .person .role{margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold)}
+  .person .cred{margin-top:10px;font-size:13px;color:var(--muted);line-height:1.5}
+  .person p{margin-top:14px;font-size:14.5px;color:#aeaeb5;line-height:1.6}
+  .person.mentor{border-color:var(--line-gold);background:linear-gradient(180deg,rgba(233,169,60,0.08),rgba(233,169,60,0.015))}
+  .person.mentor p{font-family:'Space Grotesk',sans-serif;font-size:clamp(18px,2vw,22px);color:var(--cream);line-height:1.4;letter-spacing:-0.01em;max-width:34ch}
+  @media(max-width:960px){.team-two{grid-template-columns:1fr}.team-three{grid-template-columns:1fr 1fr}}
+  @media(max-width:620px){.team-three{grid-template-columns:1fr}.person.wide{flex-direction:column;gap:22px}.person{padding:26px}}
+
   /* ---------- FOOTER ---------- */
   footer{padding:46px 0;border-top:1px solid var(--line)}
   .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
@@ -278,8 +320,17 @@
       <a href="#model">The model</a>
       <a href="#how">How it works</a>
       <a href="#applications">Applications</a>
+      <a href="#team">Team</a>
       <a href="#contact" class="nav-cta">Contact us</a>
+      <button type="button" class="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
     </nav>
+  </div>
+  <div class="mnav" id="mnav">
+    <a href="#problem">Problem</a>
+    <a href="#model">The model</a>
+    <a href="#how">How it works</a>
+    <a href="#applications">Applications</a>
+    <a href="#team">Team</a>
   </div>
 </header>
 
@@ -565,6 +616,82 @@
   </div>
 </section>
 
+<!-- TEAM -->
+<!-- Photos: add square images to assets/team/ with the file names below. Until a photo exists, the card shows initials. -->
+<section class="pad team" id="team">
+  <div class="wrap">
+    <div class="team-head">
+      <span class="label reveal">Team</span>
+      <h2 class="display reveal" style="transition-delay:.06s">The brains behind the brain.</h2>
+      <p class="reveal" style="transition-delay:.1s">Research depth in deep learning and mathematics, years of enterprise operating experience, and engineers trained at IISc Bangalore.</p>
+    </div>
+
+    <div class="team-block">
+      <div class="team-sub reveal">Leadership</div>
+      <div class="team-two">
+        <article class="person wide reveal">
+          <div class="ph" data-i="AA"><img src="assets/team/abhay-aradhya.jpg" alt="Dr. Abhay Aradhya" loading="lazy" onerror="this.remove()" /></div>
+          <div>
+            <h3>Dr. Abhay Aradhya</h3>
+            <div class="role">Founder &amp; CEO</div>
+            <div class="cred">PhD in deep learning, NTU Singapore · Second-time founder</div>
+            <p>Leads the company and its technology. Has architected enterprise AI for 22+ companies, with 9 papers at AAAI, IEEE, ICDM and IJCAI.</p>
+          </div>
+        </article>
+        <article class="person wide reveal" style="transition-delay:.08s">
+          <div class="ph" data-i="SB"><img src="assets/team/soumyadeep-bhadra.jpg" alt="Soumyadeep Bhadra" loading="lazy" onerror="this.remove()" /></div>
+          <div>
+            <h3>Soumyadeep Bhadra</h3>
+            <div class="role">CBO</div>
+            <div class="cred">MBA, IIM Ranchi · Management consulting</div>
+            <p>Leads business, partnerships and go-to-market. Seven years leading business development and large-scale transformations for Fortune organizations.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="team-block">
+      <div class="team-sub reveal">Core team</div>
+      <div class="team-three">
+        <article class="person reveal">
+          <div class="ph" data-i="NN"><img src="assets/team/narendra-nanjangud.jpg" alt="Narendra Nanjangud" loading="lazy" onerror="this.remove()" /></div>
+          <h3>Narendra Nanjangud</h3>
+          <div class="role">Algorithms Lead</div>
+          <div class="cred">PhD in applied mathematics · 33+ years at IBM Research, Ericsson, HP, Motorola</div>
+          <p>Anchors the formal foundations of the reasoning engine. 100+ published papers.</p>
+        </article>
+        <article class="person reveal" style="transition-delay:.08s">
+          <div class="ph" data-i="RB"><img src="assets/team/rahul-dev-boipai.jpg" alt="Rahul Dev Boipai" loading="lazy" onerror="this.remove()" /></div>
+          <h3>Rahul Dev Boipai</h3>
+          <div class="role">Founding AI Engineer</div>
+          <div class="cred">MTech, IISc Bangalore</div>
+          <p>Owns the orchestration and semantic map layer end to end, drawing on a deep systems, reinforcement learning and deep learning background.</p>
+        </article>
+        <article class="person reveal" style="transition-delay:.16s">
+          <div class="ph" data-i="AM"><img src="assets/team/arvind-mehta.jpg" alt="Arvind Mehta" loading="lazy" onerror="this.remove()" /></div>
+          <h3>Arvind Mehta</h3>
+          <div class="role">AI Engineer</div>
+          <div class="cred">MTech, IISc Bangalore</div>
+          <p>Builds the AI core: orchestration, retrieval and evaluation, including LLM harnesses and agent workflows.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="team-block">
+      <div class="team-sub reveal">Mentor</div>
+      <article class="person wide mentor reveal">
+        <div class="ph" data-i="BA"><img src="assets/team/bharadwaj-amrutur.jpg" alt="Prof. Bharadwaj Amrutur" loading="lazy" onerror="this.remove()" /></div>
+        <div>
+          <h3>Prof. Bharadwaj Amrutur</h3>
+          <div class="role">Mentor</div>
+          <div class="cred">Professor, IISc · Executive Director, ARTPARK</div>
+          <p>Guides technology development and mentors venture building.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- CONTACT -->
 <section class="contact soft" id="contact">
   <div class="wrap">
@@ -612,6 +739,15 @@
 <script>
   const nav=document.getElementById('nav');
   addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>20)});
+
+  // mobile menu
+  (function(){
+    const t=document.querySelector('.nav-toggle');if(!t)return;
+    function set(o){nav.classList.toggle('open',o);t.setAttribute('aria-expanded',o?'true':'false')}
+    t.addEventListener('click',()=>set(!nav.classList.contains('open')));
+    document.querySelectorAll('#mnav a').forEach(a=>a.addEventListener('click',()=>set(false)));
+    addEventListener('resize',()=>{if(innerWidth>860)set(false)});
+  })();
 
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:0.14});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
